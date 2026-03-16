@@ -5,10 +5,10 @@ class FilterOptions {
   double? minRating;
   List<String> activeOffers;
   bool isPureVeg;
-  
+
   // Additional logic placeholders
   String? dishPriceRange; // 'Under 200', '200-350', 'Above 350'
-  List<String> collections; 
+  List<String> collections;
 
   FilterOptions({
     this.sortBy = 'Relevance',

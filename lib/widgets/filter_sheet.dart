@@ -441,7 +441,7 @@ class _FilterSheetState extends State<FilterSheet> {
             double maxWidth = constraints.maxWidth;
             // 3 columns: (maxWidth - 2 * spacing) / 3
             final double itemWidth = (maxWidth - 24) / 3;
-            
+
             return Wrap(
               spacing: 12,
               runSpacing: 12,
