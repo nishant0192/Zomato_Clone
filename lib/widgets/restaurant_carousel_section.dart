@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import '../models/app_data.dart';
+import 'restaurant_card.dart';
+
+class RestaurantCarouselSection extends StatelessWidget {
+  final List<Restaurant> restaurants;
+  final bool isLoading;
+
+  const RestaurantCarouselSection({
+    super.key,
+    required this.restaurants,
+    required this.isLoading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (restaurants.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'RECOMMENDED FOR YOU',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height:
+              210, // Adjusted height for square images + text without discount row
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: restaurants.length,
+            itemBuilder: (context, index) {
+              final restaurant = restaurants[index];
+              return Container(
+                width: 140, // Smaller card width
+                margin: const EdgeInsets.only(right: 8), // Minimal gap
+                child: RestaurantCard(
+                  width: 140,
+                  imageHeight: 140, // Square image (height = width)
+                  titleSize: 12, // Smaller title size
+                  margin: EdgeInsets.zero, // Remove inner margin to reduce gap
+                  name: restaurant.name,
+                  imageUrl: restaurant.imageUrl,
+                  rating: restaurant.rating,
+                  deliveryTime: restaurant.time,
+                  startingPrice: "Free",
+                  offer: restaurant.offer,
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8), // Gap between two carousels
+        SizedBox(
+          height: 210, // Adjusted height for second carousel
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: restaurants.length,
+            itemBuilder: (context, index) {
+              final reversedIndex = restaurants.length - 1 - index;
+              final restaurant = restaurants[reversedIndex];
+              return Container(
+                width: 140, // Smaller card width
+                margin: const EdgeInsets.only(right: 8), // Minimal gap
+                child: RestaurantCard(
+                  width: 140,
+                  imageHeight: 140, // Square image (height = width)
+                  titleSize: 12, // Smaller title size
+                  margin: EdgeInsets.zero, // Remove inner margin to reduce gap
+                  name: restaurant.name,
+                  imageUrl: restaurant.imageUrl,
+                  rating: restaurant.rating,
+                  deliveryTime: restaurant.time,
+                  startingPrice: "Free",
+                  offer: restaurant.offer,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}

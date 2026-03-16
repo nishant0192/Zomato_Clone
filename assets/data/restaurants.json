@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Chinese Wok",
+    "imageUrl": "https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 3.9,
+    "time": "45-50 mins",
+    "offer": "Items starting at ₹149",
+    "isPromoted": true,
+    "isVeg": true
+  },
+  {
+    "name": "McDonald's",
+    "imageUrl": "https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 3.9,
+    "time": "45-50 mins",
+    "offer": "50% OFF select items",
+    "isPromoted": false,
+    "isVeg": false
+  },
+  {
+    "name": "Great Indian Peninsular",
+    "imageUrl": "https://images.unsplash.com/photo-1665401015549-712c0dc5ef85?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 4.1,
+    "time": "40-45 mins",
+    "offer": "₹100 OFF above ₹299",
+    "isPromoted": true,
+    "isVeg": true
+  },
+  {
+    "name": "Pizza Hut",
+    "imageUrl": "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 4.1,
+    "time": "30-35 mins",
+    "offer": "Flat ₹125 OFF",
+    "isPromoted": true,
+    "isVeg": false
+  },
+  {
+    "name": "Burger King",
+    "imageUrl": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 4.2,
+    "time": "20-25 mins",
+    "offer": "Crispy Veg @ ₹79",
+    "isPromoted": false,
+    "isVeg": true
+  }
+]
