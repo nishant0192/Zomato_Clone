@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/app_data.dart';
+import '../screens/restaurant_details_screen.dart';
 import 'restaurant_card.dart';
 
 class AllRestaurantsSection extends StatelessWidget {
@@ -46,14 +47,25 @@ class AllRestaurantsSection extends StatelessWidget {
             final restaurant = restaurants[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
-              child: RestaurantCard(
-                width: double.infinity, // Full width for vertical list
-                name: restaurant.name,
-                imageUrl: restaurant.imageUrl,
-                rating: restaurant.rating,
-                deliveryTime: restaurant.time,
-                startingPrice: "Free",
-                offer: restaurant.offer,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RestaurantDetailsScreen(restaurant: restaurant),
+                    ),
+                  );
+                },
+                child: RestaurantCard(
+                  width: double.infinity, // Full width for vertical list
+                  name: restaurant.name,
+                  imageUrl: restaurant.imageUrl,
+                  rating: restaurant.rating,
+                  deliveryTime: restaurant.time,
+                  startingPrice: "Free",
+                  offer: restaurant.offer,
+                ),
               ),
             );
           },

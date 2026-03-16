@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/filter_options.dart';
+import 'selectable_box_option.dart';
+import 'schedule_bottom_sheet.dart';
 
 class FilterSheet extends StatefulWidget {
   final FilterOptions initialFilters;
@@ -284,22 +286,26 @@ class _FilterSheetState extends State<FilterSheet> {
               children: [
                 SizedBox(
                   width: itemWidth,
-                  child: _buildSelectableBoxOption(
+                  child: SelectableBoxOption(
                     icon: Icons.schedule,
                     text: 'Schedule',
                     isSelected: _currentFilters.isScheduled,
-                    onTap: () {
+                    showCloseIcon: _currentFilters.isScheduled,
+                    onClose: () {
                       _updateFilter(
-                        _currentFilters.copyWith(
-                          isScheduled: !_currentFilters.isScheduled,
-                        ),
+                        _currentFilters.copyWith(isScheduled: false),
                       );
+                    },
+                    onTap: () {
+                      if (!_currentFilters.isScheduled) {
+                        _showScheduleBottomSheet();
+                      }
                     },
                   ),
                 ),
                 SizedBox(
                   width: itemWidth,
-                  child: _buildSelectableBoxOption(
+                  child: SelectableBoxOption(
                     icon: Icons.flash_on,
                     text: 'Near & Fast',
                     isSelected: _currentFilters.nearAndFast,
@@ -336,7 +342,7 @@ class _FilterSheetState extends State<FilterSheet> {
               children: [
                 SizedBox(
                   width: itemWidth,
-                  child: _buildSelectableBoxOption(
+                  child: SelectableBoxOption(
                     icon: Icons.star,
                     text: 'Rated 3.5+',
                     isSelected: _currentFilters.minRating == 3.5,
@@ -352,7 +358,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 ),
                 SizedBox(
                   width: itemWidth,
-                  child: _buildSelectableBoxOption(
+                  child: SelectableBoxOption(
                     icon: Icons.star,
                     text: 'Rated 4.0+',
                     isSelected: _currentFilters.minRating == 4.0,
@@ -470,7 +476,7 @@ class _FilterSheetState extends State<FilterSheet> {
     final isSelected =
         _currentFilters.dishPriceRange ==
         text.replaceAll('\n', ' '); // Simple matching
-    return _buildSelectableBoxOption(
+    return SelectableBoxOption(
       icon: Icons.currency_rupee,
       text: text,
       isSelected: isSelected,
@@ -497,7 +503,7 @@ class _FilterSheetState extends State<FilterSheet> {
               children: [
                 SizedBox(
                   width: itemWidth,
-                  child: _buildSelectableBoxOption(
+                  child: SelectableBoxOption(
                     icon: Icons.eco,
                     text: 'Pure Veg',
                     color: Colors.green,
@@ -609,48 +615,6 @@ class _FilterSheetState extends State<FilterSheet> {
     );
   }
 
-  Widget _buildSelectableBoxOption({
-    required IconData icon,
-    required String text,
-    Color color = Colors.black87,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 100),
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.deepOrange.shade50 : Colors.white,
-          border: Border.all(
-            color: isSelected ? Colors.deepOrange : Colors.grey.shade300,
-            width: isSelected ? 1.5 : 1,
-          ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: isSelected ? Colors.deepOrange : color, size: 28),
-            const SizedBox(height: 8),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.deepOrange : Colors.black87,
-              ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   // Widget _buildChipOption(String text, {IconData? icon}) {
   //   return Container(
   //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -715,5 +679,23 @@ class _FilterSheetState extends State<FilterSheet> {
         ],
       ),
     );
+  }
+
+  void _showScheduleBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return const ScheduleBottomSheetContent();
+      },
+    ).then((selected) {
+      if (selected == true) {
+        _updateFilter(_currentFilters.copyWith(isScheduled: true));
+      }
+    });
   }
 }

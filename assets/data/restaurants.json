@@ -1,12 +1,65 @@
 [
   {
+    "name": "Madhuram Sweets",
+    "imageUrl": "https://plus.unsplash.com/premium_photo-1698500035173-fdea60f9294e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "rating": 4.3,
+    "time": "40-45 mins",
+    "offer": "Flat ₹75 OFF above ₹599",
+    "isPromoted": true,
+    "isVeg": true,
+    "dishes": [
+      {
+        "id": "1",
+        "name": "Dry Fruit Mawa Gujiya",
+        "price": 300,
+        "description": "Experience the joy of holi with our special desi ghee dry fruit mawa gujiya. A delightful fusion...",
+        "imageUrl": "https://images.unsplash.com/photo-1605194000384-439c3ced8d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        "isVeg": true,
+        "isBestseller": false,
+        "isCustomisable": true
+      },
+      {
+        "id": "2",
+        "name": "Motichoor Laddu",
+        "price": 300,
+        "description": "Motichoor laddu, a popular Indian sweet made from fine chickpea flour (besan) pearls...",
+        "imageUrl": "https://images.unsplash.com/photo-1605194000384-439c3ced8d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        "isVeg": true,
+        "isBestseller": true,
+        "isCustomisable": false
+      },
+      {
+        "id": "3",
+        "name": "Stuffed Gulab Jamun [6 Pieces]",
+        "price": 250,
+        "description": "Delicious soft gulab jamuns stuffed with dry fruits and soaked in saffron syrup.",
+        "imageUrl": "https://images.unsplash.com/photo-1605194000384-439c3ced8d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        "isVeg": true,
+        "isBestseller": true,
+        "isCustomisable": false
+      }
+    ]
+  },
+  {
     "name": "Chinese Wok",
     "imageUrl": "https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
     "rating": 3.9,
     "time": "45-50 mins",
     "offer": "Items starting at ₹149",
     "isPromoted": true,
-    "isVeg": true
+    "isVeg": true,
+    "dishes": [
+      {
+        "id": "4",
+        "name": "Hakka Noodles",
+        "price": 180,
+        "description": "Classic wok-tossed noodles with veggies.",
+        "imageUrl": "https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        "isVeg": true,
+        "isBestseller": true,
+        "isCustomisable": true
+      }
+    ]
   },
   {
     "name": "McDonald's",
@@ -15,7 +68,19 @@
     "time": "45-50 mins",
     "offer": "50% OFF select items",
     "isPromoted": false,
-    "isVeg": false
+    "isVeg": false,
+    "dishes": [
+      {
+        "id": "5",
+        "name": "McAloo Tikki Burger",
+        "price": 49,
+        "description": "A golden brown aloo tikki patty.",
+        "imageUrl": "https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        "isVeg": true,
+        "isBestseller": true,
+        "isCustomisable": false
+      }
+    ]
   },
   {
     "name": "Great Indian Peninsular",

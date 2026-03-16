@@ -3,6 +3,7 @@ class FilterOptions {
   bool nearAndFast;
   bool isScheduled;
   double? minRating;
+  int? maxDeliveryTime;
   List<String> activeOffers;
   bool isPureVeg;
 
@@ -15,6 +16,7 @@ class FilterOptions {
     this.nearAndFast = false,
     this.isScheduled = false,
     this.minRating,
+    this.maxDeliveryTime,
     this.activeOffers = const [],
     this.isPureVeg = false,
     this.dishPriceRange,
@@ -26,6 +28,7 @@ class FilterOptions {
     bool? nearAndFast,
     bool? isScheduled,
     double? minRating,
+    int? maxDeliveryTime,
     List<String>? activeOffers,
     bool? isPureVeg,
     String? dishPriceRange,
@@ -35,6 +38,10 @@ class FilterOptions {
       sortBy: sortBy ?? this.sortBy,
       nearAndFast: nearAndFast ?? this.nearAndFast,
       isScheduled: isScheduled ?? this.isScheduled,
+      minRating: minRating ?? this.minRating,
+      maxDeliveryTime: maxDeliveryTime ?? this.maxDeliveryTime,
+      activeOffers: activeOffers ?? this.activeOffers,
+      isPureVeg: isPureVeg ?? this.isPureVeg,
       dishPriceRange: dishPriceRange ?? this.dishPriceRange,
       collections: collections ?? this.collections,
     );

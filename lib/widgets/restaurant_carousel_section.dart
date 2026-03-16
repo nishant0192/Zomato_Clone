@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/app_data.dart';
+import '../screens/restaurant_details_screen.dart';
 import 'restaurant_card.dart';
 
 class RestaurantCarouselSection extends StatelessWidget {
@@ -53,17 +54,29 @@ class RestaurantCarouselSection extends StatelessWidget {
               return Container(
                 width: 140, // Smaller card width
                 margin: const EdgeInsets.only(right: 8), // Minimal gap
-                child: RestaurantCard(
-                  width: 140,
-                  imageHeight: 140, // Square image (height = width)
-                  titleSize: 12, // Smaller title size
-                  margin: EdgeInsets.zero, // Remove inner margin to reduce gap
-                  name: restaurant.name,
-                  imageUrl: restaurant.imageUrl,
-                  rating: restaurant.rating,
-                  deliveryTime: restaurant.time,
-                  startingPrice: "Free",
-                  offer: restaurant.offer,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            RestaurantDetailsScreen(restaurant: restaurant),
+                      ),
+                    );
+                  },
+                  child: RestaurantCard(
+                    width: 140,
+                    imageHeight: 140, // Square image (height = width)
+                    titleSize: 12, // Smaller title size
+                    margin:
+                        EdgeInsets.zero, // Remove inner margin to reduce gap
+                    name: restaurant.name,
+                    imageUrl: restaurant.imageUrl,
+                    rating: restaurant.rating,
+                    deliveryTime: restaurant.time,
+                    startingPrice: "Free",
+                    offer: restaurant.offer,
+                  ),
                 ),
               );
             },
@@ -82,17 +95,29 @@ class RestaurantCarouselSection extends StatelessWidget {
               return Container(
                 width: 140, // Smaller card width
                 margin: const EdgeInsets.only(right: 8), // Minimal gap
-                child: RestaurantCard(
-                  width: 140,
-                  imageHeight: 140, // Square image (height = width)
-                  titleSize: 12, // Smaller title size
-                  margin: EdgeInsets.zero, // Remove inner margin to reduce gap
-                  name: restaurant.name,
-                  imageUrl: restaurant.imageUrl,
-                  rating: restaurant.rating,
-                  deliveryTime: restaurant.time,
-                  startingPrice: "Free",
-                  offer: restaurant.offer,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            RestaurantDetailsScreen(restaurant: restaurant),
+                      ),
+                    );
+                  },
+                  child: RestaurantCard(
+                    width: 140,
+                    imageHeight: 140, // Square image (height = width)
+                    titleSize: 12, // Smaller title size
+                    margin:
+                        EdgeInsets.zero, // Remove inner margin to reduce gap
+                    name: restaurant.name,
+                    imageUrl: restaurant.imageUrl,
+                    rating: restaurant.rating,
+                    deliveryTime: restaurant.time,
+                    startingPrice: "Free",
+                    offer: restaurant.offer,
+                  ),
                 ),
               );
             },

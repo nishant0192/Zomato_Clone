@@ -50,8 +50,10 @@ class RestaurantCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => const Center(
-                      child: Icon(Icons.fastfood, size: 50, color: Colors.grey),
+                    errorWidget: (context, url, error) => CachedNetworkImage(
+                      imageUrl:
+                          'https://images.unsplash.com/photo-1544025162-811afe52fa31?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

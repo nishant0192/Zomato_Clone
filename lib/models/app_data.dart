@@ -1,3 +1,38 @@
+class Dish {
+  final String id;
+  final String name;
+  final int price;
+  final String description;
+  final String imageUrl;
+  final bool isVeg;
+  final bool isBestseller;
+  final bool isCustomisable;
+
+  const Dish({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.description,
+    required this.imageUrl,
+    this.isVeg = true,
+    this.isBestseller = false,
+    this.isCustomisable = true,
+  });
+
+  factory Dish.fromJson(Map<String, dynamic> json) {
+    return Dish(
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String,
+      price: json['price'] as int,
+      description: json['description'] as String? ?? '',
+      imageUrl: json['imageUrl'] as String? ?? '',
+      isVeg: json['isVeg'] as bool? ?? true,
+      isBestseller: json['isBestseller'] as bool? ?? false,
+      isCustomisable: json['isCustomisable'] as bool? ?? true,
+    );
+  }
+}
+
 class Restaurant {
   final String name;
   final String imageUrl;
@@ -6,6 +41,7 @@ class Restaurant {
   final String offer;
   final bool isPromoted;
   final bool isVeg;
+  final List<Dish> dishes; // new field
 
   const Restaurant({
     required this.name,
@@ -15,6 +51,7 @@ class Restaurant {
     required this.offer,
     this.isPromoted = false,
     this.isVeg = false,
+    this.dishes = const [],
   });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -26,6 +63,9 @@ class Restaurant {
       offer: json['offer'] as String,
       isPromoted: json['isPromoted'] as bool? ?? false,
       isVeg: json['isVeg'] as bool? ?? false,
+      dishes: json['dishes'] != null
+          ? (json['dishes'] as List).map((d) => Dish.fromJson(d)).toList()
+          : [],
     );
   }
 }
