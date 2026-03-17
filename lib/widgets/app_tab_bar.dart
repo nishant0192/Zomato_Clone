@@ -38,9 +38,14 @@ class AppTabBar extends StatelessWidget {
           child: TabBar(
             controller: controller,
             labelPadding: EdgeInsets.zero,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicator: const BoxDecoration(), // Remove orange dot
-            labelColor: labelColor,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: EdgeInsets.zero,
+            indicator: BoxDecoration(
+              color: Colors.green.shade800,
+              borderRadius: BorderRadius.circular(AppRadius.round),
+            ),
+            dividerColor: Colors.transparent,
+            labelColor: Colors.white,
             labelStyle: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.bold,

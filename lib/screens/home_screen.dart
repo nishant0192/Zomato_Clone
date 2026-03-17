@@ -8,6 +8,7 @@ import '../widgets/category_list.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/app_tab_bar.dart';
 import '../widgets/restaurant_list_section.dart';
+import '../widgets/restaurant_carousel_section.dart';
 import '../widgets/promo_banner.dart';
 import '../models/app_data.dart';
 import '../models/filter_options.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen>
   List<Restaurant> _restaurants = [];
   bool _isLoading = true;
   FilterOptions _filterOptions = FilterOptions();
+  String _searchQuery = '';
   bool _isBottomNavVisible = true;
 
   @override
@@ -86,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen>
         final hasCartItems = cartManager.items.isNotEmpty;
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: Stack(
             children: [
@@ -102,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
                   return false;
                 },
                 child: SafeArea(
+                  top: false,
                   child: TabBarView(
                     controller: _tabController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -123,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ? 36
                       : -100, // Slides down out of screen
                   left: 16,
-                  right: 16 + 85 + 12, // 16 margin + 85 green pill + 12 gap
+                  right: 112 + 12, // 112 green pill + 12 gap
                   child: AnimatedOpacity(
                     opacity: _isBottomNavVisible ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
@@ -146,25 +150,21 @@ class _HomeScreenState extends State<HomeScreen>
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeOut,
                   bottom: 36, // Consistent with White Pill
-                  right: _isBottomNavVisible
-                      ? 16
-                      : 0, // Attaches to right edge when scrolled
+                  right: 0, // Attaches to right edge always
                   child: GestureDetector(
                     onTap: _showHealthyModeDialog,
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       height: 64, // Matching apptabbar height
                       width: _isBottomNavVisible
-                          ? 85.0
+                          ? 115.0
                           : 64.0, // Fixed width for consistent alignment
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2C5E35), // Dark green color
-                        borderRadius: _isBottomNavVisible
-                            ? BorderRadius.circular(24)
-                            : const BorderRadius.only(
-                                topLeft: Radius.circular(32),
-                                bottomLeft: Radius.circular(32),
-                              ),
+                        color: const Color(0xFF385E3D), // Healthy dark green
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(32),
+                          bottomLeft: Radius.circular(32),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.15),
@@ -181,23 +181,25 @@ class _HomeScreenState extends State<HomeScreen>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(
-                              Icons.favorite_border,
+                              Icons
+                                  .volunteer_activism, // Heart being held, UI visual match
                               color: Colors.white,
-                              size: 24,
+                              size: 22,
                             ),
                             if (_isBottomNavVisible) ...[
-                              const SizedBox(height: 2),
+                              const SizedBox(height: 4),
                               const Text(
-                                'Healthy\nMode',
+                                'Healthy Mode',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 11,
+                                  letterSpacing:
+                                      -0.2, // Tighter letter spacing to fit beautifully
                                   height: 1.1,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.visible,
+                                maxLines: 1,
                               ),
                             ],
                           ],
@@ -331,19 +333,20 @@ class _HomeScreenState extends State<HomeScreen>
 
     return CustomScrollView(
       slivers: [
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [TopBar(), AppSpacing.vMd],
-          ),
-        ),
         SliverPersistentHeader(
           pinned: true,
           delegate: _StickyHeaderDelegate(
+            topInset: MediaQuery.of(context).padding.top,
+            topBar: const TopBar(isDarkBackground: true),
             searchArea: Padding(
-              padding: Responsive.getResponsivePadding(context),
+              padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: SearchArea(
                 isVegOnly: _filterOptions.isPureVeg,
+                onSearchChanged: (val) {
+                  setState(() {
+                    _searchQuery = val;
+                  });
+                },
                 onVegToggle: (val) {
                   setState(() {
                     _filterOptions = _filterOptions.copyWith(isPureVeg: val);
@@ -351,12 +354,11 @@ class _HomeScreenState extends State<HomeScreen>
                 },
               ),
             ),
-            promoBanner: const Padding(
-              padding: EdgeInsets.only(
-                top: AppSpacing.sm,
-                bottom: AppSpacing.md,
+            promoBanner: Padding(
+              padding: EdgeInsets.zero,
+              child: PromoBanner(
+                topPadding: 100 + MediaQuery.of(context).padding.top,
               ),
-              child: PromoBanner(),
             ),
             categoriesAndFilters: Column(
               mainAxisSize: MainAxisSize.min,
@@ -400,7 +402,16 @@ class _HomeScreenState extends State<HomeScreen>
               child: Center(child: CircularProgressIndicator()),
             ),
           )
-        else
+        else ...[
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 0.0),
+              child: RestaurantCarouselSection(
+                restaurants: filteredRestaurants,
+                isLoading: _isLoading,
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: Responsive.getResponsivePadding(context),
@@ -411,6 +422,7 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
           ),
+        ],
         const SliverToBoxAdapter(
           child: SizedBox(height: 100), // Extra space for floating bar
         ),
@@ -465,6 +477,19 @@ class _HomeScreenState extends State<HomeScreen>
   List<Restaurant> _getFilteredAndSortedRestaurants() {
     List<Restaurant> filteredRestaurants = _restaurants;
 
+    // Apply search filter
+    if (_searchQuery.isNotEmpty) {
+      final query = _searchQuery.toLowerCase();
+      filteredRestaurants = filteredRestaurants.where((r) {
+        // Search in restaurant name
+        if (r.name.toLowerCase().contains(query)) return true;
+        // Search in dishes
+        if (r.dishes.any((d) => d.name.toLowerCase().contains(query)))
+          return true;
+        return false;
+      }).toList();
+    }
+
     // Apply pure veg filter
     if (_filterOptions.isPureVeg) {
       filteredRestaurants = filteredRestaurants.where((r) => r.isVeg).toList();
@@ -516,19 +541,26 @@ class _HomeScreenState extends State<HomeScreen>
 }
 
 class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget topBar;
   final Widget searchArea;
   final Widget promoBanner;
   final Widget categoriesAndFilters;
+  final double topInset;
 
+  late final double topBarHeight;
   final double searchHeight = 85.0;
-  final double promoHeight = 265.0;
+  final double promoHeight = 280.0; // Taller for full screen behind
   final double bottomHeight = 150.0;
 
   _StickyHeaderDelegate({
+    required this.topBar,
     required this.searchArea,
     required this.promoBanner,
     required this.categoriesAndFilters,
-  });
+    required this.topInset,
+  }) {
+    topBarHeight = 60.0 + topInset;
+  }
 
   @override
   Widget build(
@@ -536,58 +568,107 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final double fadeOutProgress = (shrinkOffset / promoHeight).clamp(0.0, 1.0);
+    // Determine opacity of promo banner
+    final double maxShrink = promoHeight;
+    final double fadeOutProgress = (shrinkOffset / maxShrink).clamp(0.0, 1.0);
 
-    return Container(
-      color: Colors.white,
-      child: ClipRect(
-        child: Stack(
-          children: [
-            // Promo Banner (fades out and gets covered as it shrinks)
-            Positioned(
-              top: searchHeight,
-              left: 0,
-              right: 0,
-              height: promoHeight,
-              child: Opacity(
-                opacity: 1.0 - fadeOutProgress,
-                child: promoBanner,
-              ),
+    // Background changes from transparent to white as it shrinks
+    final Color bgColor = Color.lerp(
+      Colors.transparent,
+      Colors.white,
+      fadeOutProgress,
+    )!;
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: fadeOutProgress < 0.5
+          ? SystemUiOverlayStyle.light.copyWith(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.light,
+              statusBarBrightness: Brightness.dark,
+            )
+          : SystemUiOverlayStyle.dark.copyWith(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.light,
             ),
-            // Bottom Area (Categories + Filters - anchors to bottom)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: bottomHeight,
-              child: Container(
-                color: Colors.white,
-                child: categoriesAndFilters,
+      child: Container(
+        color: Colors.white,
+        child: ClipRect(
+          child: Stack(
+            children: [
+              // Middle Area (Promo Banner) - Starts at very top, fades out
+              Positioned(
+                top: -shrinkOffset * 0.5,
+                left: 0,
+                right: 0,
+                height:
+                    promoHeight +
+                    topBarHeight, // Tall enough to sit behind top bar
+                child: Opacity(
+                  opacity: 1.0 - fadeOutProgress,
+                  child: promoBanner,
+                ),
               ),
-            ),
-            // Top Area (Search Area - stays fixed)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: searchHeight,
-              child: Container(
-                color: Colors.white,
-                alignment: Alignment.center,
-                child: searchArea,
+              // Persistent background for search/topbar when scrolled
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height:
+                    (topBarHeight - shrinkOffset > topInset
+                        ? topBarHeight - shrinkOffset
+                        : topInset) +
+                    searchHeight,
+                child: Container(color: bgColor),
               ),
-            ),
-          ],
+              // Bottom Area (Categories + Filters - anchors to bottom)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: bottomHeight,
+                child: Container(
+                  color: Colors.white,
+                  child: categoriesAndFilters,
+                ),
+              ),
+              // Search Area (stays fixed below Top Bar)
+              Positioned(
+                top: topBarHeight - shrinkOffset > topInset
+                    ? topBarHeight - shrinkOffset
+                    : topInset,
+                left: 0,
+                right: 0,
+                height: searchHeight,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: searchArea,
+                ),
+              ),
+              // Top Area (Top Bar - ALWAYS FIXED AT TOP)
+              Positioned(
+                top: topInset - shrinkOffset,
+                left: 0,
+                right: 0,
+                height: topBarHeight - topInset,
+                child: Container(
+                  alignment: Alignment.center,
+                  // TopBar dynamically adjusts its color text based on scroll position by replacing widget dynamically or using transparency threshold
+                  child: TopBar(isDarkBackground: fadeOutProgress < 0.5),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   @override
-  double get maxExtent => searchHeight + promoHeight + bottomHeight;
+  double get maxExtent => topBarHeight + promoHeight + bottomHeight;
 
   @override
-  double get minExtent => searchHeight + bottomHeight;
+  double get minExtent => topInset + searchHeight + bottomHeight;
 
   @override
   bool shouldRebuild(covariant _StickyHeaderDelegate oldDelegate) {

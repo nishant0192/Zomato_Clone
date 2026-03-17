@@ -10,10 +10,9 @@ class CartManager extends ChangeNotifier {
   Restaurant? currentRestaurant;
 
   void updateQuantity(Dish dish, int delta, Restaurant restaurant) {
-    if (currentRestaurant != null && currentRestaurant != restaurant) {
-      clear();
+    if (currentRestaurant == null) {
+      currentRestaurant = restaurant;
     }
-    currentRestaurant = restaurant;
 
     final current = items[dish] ?? 0;
     final next = current + delta;

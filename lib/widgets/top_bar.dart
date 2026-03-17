@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import '../screens/profile_screen.dart' as profile_screen;
-import '../screens/location_screen.dart';
+import '../screens/address_screen.dart';
 import '../models/user_profile.dart';
 import '../models/address_model.dart';
 
 class TopBar extends StatelessWidget {
-  const TopBar({super.key});
+  final bool isDarkBackground;
+
+  const TopBar({super.key, this.isDarkBackground = false});
 
   @override
   Widget build(BuildContext context) {
+    final textColor = isDarkBackground ? Colors.white : Colors.black87;
+    final subtitleColor = isDarkBackground ? Colors.white70 : Colors.grey;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
@@ -20,13 +25,13 @@ class TopBar extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const LocationScreen(),
+                    builder: (context) => const AddressScreen(),
                   ),
                 );
               },
               child: Row(
                 children: [
-                  const Icon(Icons.location_on, color: Colors.black87),
+                  Icon(Icons.location_on, color: textColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: ValueListenableBuilder<AddressModel>(
@@ -41,22 +46,27 @@ class TopBar extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     currentAddress.title,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
+                                      color: textColor,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
                                 ),
-                                const Icon(Icons.keyboard_arrow_down, size: 20),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 20,
+                                  color: textColor,
+                                ),
                               ],
                             ),
                             Text(
                               currentAddress.subtitle,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey,
+                                color: subtitleColor,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -86,13 +96,17 @@ class TopBar extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               _buildIconContainer(
-                child: const Icon(
+                child: Icon(
                   Icons.account_balance_wallet_outlined,
                   size: 20,
-                  color: Colors.black87,
+                  color: isDarkBackground ? Colors.white : Colors.black87,
                 ),
-                color: Colors.white,
-                borderColor: Colors.grey.shade400,
+                color: isDarkBackground
+                    ? Colors.white.withOpacity(0.2)
+                    : Colors.white,
+                borderColor: isDarkBackground
+                    ? Colors.transparent
+                    : Colors.grey.shade400,
                 width: 38,
                 height: 38,
               ),

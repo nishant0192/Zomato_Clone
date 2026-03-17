@@ -128,7 +128,41 @@ class RestaurantListSection extends StatelessWidget {
   }
 
   Widget _buildRestaurantCard(BuildContext context, Restaurant restaurant) {
-    // Mocking some data to match the UI screenshot
+    return _RestaurantCardItem(restaurant: restaurant);
+  }
+}
+
+class _RestaurantCardItem extends StatefulWidget {
+  final Restaurant restaurant;
+
+  const _RestaurantCardItem({required this.restaurant});
+
+  @override
+  State<_RestaurantCardItem> createState() => _RestaurantCardItemState();
+}
+
+class _RestaurantCardItemState extends State<_RestaurantCardItem> {
+  int _currentImageIndex = 0;
+  late final List<String> _images;
+
+  @override
+  void initState() {
+    super.initState();
+    // Create a list of images for the slider, starting with the restaurant's image,
+    // and appending dish images from the data.
+    if (widget.restaurant.imageUrls.isNotEmpty) {
+      _images = widget.restaurant.imageUrls;
+    } else {
+      _images = [
+        widget.restaurant.imageUrl,
+        ...widget.restaurant.dishes.take(4).map((dish) => dish.imageUrl),
+      ];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final restaurant = widget.restaurant;
     final String label = restaurant.isVeg
         ? 'Pure Veg • ₹150 for one'
         : 'Best Seller • ₹200 for one';
@@ -147,7 +181,10 @@ class RestaurantListSection extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 0,
+          vertical: 0,
+        ), // Reduced side margin
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -172,13 +209,23 @@ class RestaurantListSection extends StatelessWidget {
                   ),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: Image.network(
-                      restaurant.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
+                    child: PageView.builder(
+                      itemCount: _images.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
                         return Image.network(
-                          'https://images.unsplash.com/photo-1544025162-811afe52fa31?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                          _images[index],
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.network(
+                              'https://images.unsplash.com/photo-1544025162-811afe52fa31?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                              fit: BoxFit.cover,
+                            );
+                          },
                         );
                       },
                     ),
@@ -227,13 +274,13 @@ class RestaurantListSection extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: List.generate(
-                      5,
+                      _images.length,
                       (index) => Container(
                         margin: const EdgeInsets.only(left: 4),
-                        width: index == 0 ? 8 : 6,
-                        height: index == 0 ? 8 : 6,
+                        width: index == _currentImageIndex ? 8 : 6,
+                        height: index == _currentImageIndex ? 8 : 6,
                         decoration: BoxDecoration(
-                          color: index == 0
+                          color: index == _currentImageIndex
                               ? Colors.white
                               : Colors.white.withOpacity(0.5),
                           shape: BoxShape.circle,
@@ -250,17 +297,84 @@ class RestaurantListSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Row 1: Title and Rating
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Text(
-                          restaurant.name,
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              restaurant.name,
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(fontWeight: FontWeight.w700),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_filled,
+                                  size: 16,
+                                  color: Colors.grey.shade700,
+                                ),
+                                AppSpacing.hXs,
+                                Text(
+                                  restaurant.time,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6.0,
+                                  ),
+                                  child: Text(
+                                    '|',
+                                    style: TextStyle(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  distance,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6.0,
+                                  ),
+                                  child: Text(
+                                    '|',
+                                    style: TextStyle(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.electric_bike,
+                                  size: 16,
+                                  color: Colors.grey.shade700,
+                                ),
+                                AppSpacing.hXs,
+                                Text(
+                                  'Free',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       AppSpacing.hSm,
@@ -302,7 +416,7 @@ class RestaurantListSection extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                                   color: Colors.grey.shade600,
-                                  fontSize: 11,
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w600,
                                 ),
                           ),
@@ -310,65 +424,9 @@ class RestaurantListSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppSpacing.vSm,
-                  // Row 2: Delivery Info
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.access_time_filled,
-                        size: 16,
-                        color: Colors.grey.shade700,
-                      ),
-                      AppSpacing.hXs,
-                      Text(
-                        restaurant.time,
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: Text(
-                          '|',
-                          style: TextStyle(color: Colors.grey.shade400),
-                        ),
-                      ),
-                      Text(
-                        distance,
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        child: Text(
-                          '|',
-                          style: TextStyle(color: Colors.grey.shade400),
-                        ),
-                      ),
-                      Icon(
-                        Icons.electric_bike,
-                        size: 16,
-                        color: Colors.grey.shade700,
-                      ),
-                      AppSpacing.hXs,
-                      Text(
-                        'Free',
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
                   // Row 3: Offers
                   if (restaurant.offer.isNotEmpty) ...[
-                    AppSpacing.vLg,
+                    const SizedBox(height: 6), // Better spacing above offers
                     Row(
                       children: [
                         Icon(

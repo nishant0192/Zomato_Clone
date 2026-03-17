@@ -1,16 +1,43 @@
 import 'package:flutter/material.dart';
 
-class CategoryList extends StatelessWidget {
+class CategoryList extends StatefulWidget {
   const CategoryList({super.key});
+
+  @override
+  State<CategoryList> createState() => _CategoryListState();
+}
+
+class _CategoryListState extends State<CategoryList> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final categories = [
-      {'name': 'All', 'image': 'assets/cat_all.png'},
-      {'name': 'North Indian', 'image': 'assets/cat_north.png'},
-      {'name': 'Biryani', 'image': 'assets/cat_biryani.png'},
-      {'name': 'Chinese', 'image': 'assets/cat_chinese.png'},
-      {'name': 'New', 'image': 'assets/cat_new.png'},
+      {
+        'name': 'All',
+        'image':
+            'https://plus.unsplash.com/premium_photo-1700677185820-c38b28c3dd06',
+      },
+      {
+        'name': 'North Indian',
+        'image':
+            'https://plus.unsplash.com/premium_photo-1700677185820-c38b28c3dd06',
+      },
+      {
+        'name': 'Biryani',
+        'image':
+            'https://plus.unsplash.com/premium_photo-1700677185820-c38b28c3dd06',
+      },
+      {
+        'name': 'Chinese',
+        'image':
+            'https://plus.unsplash.com/premium_photo-1700677185820-c38b28c3dd06',
+      },
+      {
+        'name': 'New',
+        'image':
+            'https://plus.unsplash.com/premium_photo-1700677185820-c38b28c3dd06',
+      },
     ];
 
     return SizedBox(
@@ -21,50 +48,51 @@ class CategoryList extends StatelessWidget {
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final cat = categories[index];
-          return Container(
-            margin: const EdgeInsets.only(right: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.grey.shade100,
-                  child: Icon(
-                    _getIconForCategory(cat['name']!),
-                    color: Colors.deepOrange,
-                    size: 28,
+          final isSelected = _selectedIndex == index;
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 16),
+              decoration: isSelected
+                  ? const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.green, width: 3.0),
+                      ),
+                    )
+                  : null,
+              padding: const EdgeInsets.only(
+                bottom: 4,
+              ), // Padding to space out the green border
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.grey.shade100,
+                    backgroundImage: NetworkImage(cat['image']!),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  cat['name']!,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                  const SizedBox(height: 8),
+                  Text(
+                    cat['name']!,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.w500,
+                      color: isSelected ? Colors.black : Colors.grey.shade700,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
       ),
     );
-  }
-
-  IconData _getIconForCategory(String name) {
-    switch (name.toLowerCase()) {
-      case 'all':
-        return Icons.grid_view;
-      case 'north indian':
-        return Icons.soup_kitchen;
-      case 'biryani':
-        return Icons.rice_bowl;
-      case 'chinese':
-        return Icons.ramen_dining;
-      case 'new':
-        return Icons.fiber_new;
-      default:
-        return Icons.fastfood;
-    }
   }
 }

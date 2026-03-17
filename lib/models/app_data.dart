@@ -42,6 +42,7 @@ class Restaurant {
   final bool isPromoted;
   final bool isVeg;
   final List<Dish> dishes; // new field
+  final List<String> imageUrls;
 
   const Restaurant({
     required this.name,
@@ -52,6 +53,7 @@ class Restaurant {
     this.isPromoted = false,
     this.isVeg = false,
     this.dishes = const [],
+    this.imageUrls = const [],
   });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -66,6 +68,9 @@ class Restaurant {
       dishes: json['dishes'] != null
           ? (json['dishes'] as List).map((d) => Dish.fromJson(d)).toList()
           : [],
+      imageUrls: json['imageUrls'] != null
+          ? List<String>.from(json['imageUrls'])
+          : (json['imageUrl'] != null ? [json['imageUrl'] as String] : []),
     );
   }
 }

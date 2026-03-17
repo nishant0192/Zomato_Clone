@@ -2,6 +2,11 @@
   {
     "name": "Madhuram Sweets",
     "imageUrl": "https://plus.unsplash.com/premium_photo-1698500035173-fdea60f9294e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "imageUrls": [
+      "https://plus.unsplash.com/premium_photo-1698500035173-fdea60f9294e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1605194000384-439c3ced8d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    ],
     "rating": 4.3,
     "time": "40-45 mins",
     "offer": "Flat ₹75 OFF above ₹599",
@@ -43,6 +48,10 @@
   {
     "name": "Chinese Wok",
     "imageUrl": "https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1563245372-f24685b17e42?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    ],
     "rating": 3.9,
     "time": "45-50 mins",
     "offer": "Items starting at ₹149",
@@ -64,6 +73,10 @@
   {
     "name": "McDonald's",
     "imageUrl": "https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    ],
     "rating": 3.9,
     "time": "45-50 mins",
     "offer": "50% OFF select items",
@@ -85,6 +98,10 @@
   {
     "name": "Great Indian Peninsular",
     "imageUrl": "https://images.unsplash.com/photo-1665401015549-712c0dc5ef85?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1665401015549-712c0dc5ef85?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    ],
     "rating": 4.1,
     "time": "40-45 mins",
     "offer": "₹100 OFF above ₹299",
@@ -94,6 +111,10 @@
   {
     "name": "Pizza Hut",
     "imageUrl": "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    ],
     "rating": 4.1,
     "time": "30-35 mins",
     "offer": "Flat ₹125 OFF",
@@ -103,6 +124,10 @@
   {
     "name": "Burger King",
     "imageUrl": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    ],
     "rating": 4.2,
     "time": "20-25 mins",
     "offer": "Crispy Veg @ ₹79",

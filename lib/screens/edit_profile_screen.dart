@@ -76,16 +76,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     Navigator.pop(context); // Go back after saving
   }
 
+  Future<void> _selectDate(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF008D4C), // Header background color
+              onPrimary: Colors.white, // Header text color
+              onSurface: Colors.black87, // Body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF008D4C), // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        // Format to a readable string, e.g. YYYY-MM-DD or DD/MM/YYYY
+        // Based on whatever formatting was there. Let's use DD-MM-YYYY format
+        controller.text =
+            "\${picked.day.toString().padLeft(2, '0')}-\${picked.month.toString().padLeft(2, '0')}-\${picked.year}";
+      });
+      _checkForChanges();
+    }
+  }
+
   Widget _buildTextField(
     String label,
     TextEditingController controller, {
     bool hasClearIcon = false,
     bool hasChangeButton = false,
+    bool isReadOnly = false,
+    VoidCallback? onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: TextField(
         controller: controller,
+        readOnly: isReadOnly,
+        onTap: onTap,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         decoration: InputDecoration(
           labelText: label,
@@ -235,11 +277,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           _buildTextField(
                             'Date of birth',
                             _dobController,
-                            hasClearIcon: true,
+                            isReadOnly: true,
+                            onTap: () => _selectDate(context, _dobController),
                           ),
                           _buildTextField(
                             'Anniversary',
                             _anniversaryController,
+                            isReadOnly: true,
+                            onTap: () =>
+                                _selectDate(context, _anniversaryController),
                           ),
                           _buildDropdownField(
                             'Gender',

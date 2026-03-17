@@ -13,9 +13,14 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_floating_bottom_bar: ^1.4.0
+  flutter_map: ^8.2.2
+  geocoding: ^4.0.0
+  geolocator: ^14.0.2
   google_fonts: ^8.0.2
   http: ^1.6.0
   intl: ^0.20.2
+  latlong2: ^0.9.1
+  scroll_to_index: ^3.0.1
   zego_uikit_prebuilt_call: ^4.22.3
 
 dev_dependencies:

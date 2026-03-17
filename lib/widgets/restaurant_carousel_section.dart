@@ -43,82 +43,77 @@ class RestaurantCarouselSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height:
-              210, // Adjusted height for square images + text without discount row
+          height: 428, // 210 * 2 + 8 gap
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: restaurants.length,
             itemBuilder: (context, index) {
               final restaurant = restaurants[index];
-              return Container(
-                width: 140, // Smaller card width
-                margin: const EdgeInsets.only(right: 8), // Minimal gap
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            RestaurantDetailsScreen(restaurant: restaurant),
-                      ),
-                    );
-                  },
-                  child: RestaurantCard(
-                    width: 140,
-                    imageHeight: 140, // Square image (height = width)
-                    titleSize: 12, // Smaller title size
-                    margin:
-                        EdgeInsets.zero, // Remove inner margin to reduce gap
-                    name: restaurant.name,
-                    imageUrl: restaurant.imageUrl,
-                    rating: restaurant.rating,
-                    deliveryTime: restaurant.time,
-                    startingPrice: "Free",
-                    offer: restaurant.offer,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 8), // Gap between two carousels
-        SizedBox(
-          height: 210, // Adjusted height for second carousel
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: restaurants.length,
-            itemBuilder: (context, index) {
               final reversedIndex = restaurants.length - 1 - index;
-              final restaurant = restaurants[reversedIndex];
-              return Container(
-                width: 140, // Smaller card width
-                margin: const EdgeInsets.only(right: 8), // Minimal gap
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            RestaurantDetailsScreen(restaurant: restaurant),
+              final bottomRestaurant = restaurants[reversedIndex];
+
+              return Column(
+                children: [
+                  Container(
+                    width: 140, // Smaller card width
+                    margin: const EdgeInsets.only(right: 8), // Minimal gap
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                RestaurantDetailsScreen(restaurant: restaurant),
+                          ),
+                        );
+                      },
+                      child: RestaurantCard(
+                        width: 140,
+                        imageHeight: 140, // Square image (height = width)
+                        titleSize: 12, // Smaller title size
+                        margin: EdgeInsets
+                            .zero, // Remove inner margin to reduce gap
+                        name: restaurant.name,
+                        imageUrl: restaurant.imageUrl,
+                        rating: restaurant.rating,
+                        deliveryTime: restaurant.time,
+                        startingPrice: "Free",
+                        offer: restaurant.offer,
                       ),
-                    );
-                  },
-                  child: RestaurantCard(
-                    width: 140,
-                    imageHeight: 140, // Square image (height = width)
-                    titleSize: 12, // Smaller title size
-                    margin:
-                        EdgeInsets.zero, // Remove inner margin to reduce gap
-                    name: restaurant.name,
-                    imageUrl: restaurant.imageUrl,
-                    rating: restaurant.rating,
-                    deliveryTime: restaurant.time,
-                    startingPrice: "Free",
-                    offer: restaurant.offer,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 140, // Smaller card width
+                    margin: const EdgeInsets.only(right: 8), // Minimal gap
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RestaurantDetailsScreen(
+                              restaurant: bottomRestaurant,
+                            ),
+                          ),
+                        );
+                      },
+                      child: RestaurantCard(
+                        width: 140,
+                        imageHeight: 140, // Square image (height = width)
+                        titleSize: 12, // Smaller title size
+                        margin: EdgeInsets
+                            .zero, // Remove inner margin to reduce gap
+                        name: bottomRestaurant.name,
+                        imageUrl: bottomRestaurant.imageUrl,
+                        rating: bottomRestaurant.rating,
+                        deliveryTime: bottomRestaurant.time,
+                        startingPrice: "Free",
+                        offer: bottomRestaurant.offer,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),

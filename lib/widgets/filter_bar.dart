@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'filter_sheet.dart';
+import 'filter_bottom_sheet.dart';
 import '../models/filter_options.dart';
 
 class FilterBar extends StatelessWidget {
@@ -20,7 +20,7 @@ class FilterBar extends StatelessWidget {
       height: 40,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 0),
         children: [
           GestureDetector(
             onTap: () async {
@@ -28,8 +28,7 @@ class FilterBar extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 backgroundColor: Colors.transparent,
-                builder: (context) =>
-                    FilterSheet(initialFilters: currentFilters),
+                builder: (context) => const FilterBottomSheet(),
               );
 
               if (result != null) {

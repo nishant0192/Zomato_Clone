@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class SearchArea extends StatelessWidget {
   final bool isVegOnly;
   final ValueChanged<bool> onVegToggle;
+  final ValueChanged<String>? onSearchChanged;
 
   const SearchArea({
     super.key,
     required this.isVegOnly,
     required this.onVegToggle,
+    this.onSearchChanged,
   });
 
   @override
@@ -15,18 +17,21 @@ class SearchArea extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -36,6 +41,7 @@ class SearchArea extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
+                      onChanged: onSearchChanged,
                       decoration: InputDecoration(
                         hintText: "Restaurant name or a dish...",
                         hintStyle: TextStyle(
@@ -47,36 +53,53 @@ class SearchArea extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(width: 1, height: 20, color: Colors.grey.shade300),
+                  Container(width: 1, height: 24, color: Colors.grey.shade300),
                   const SizedBox(width: 8),
                   Icon(Icons.mic_none_outlined, color: Colors.green.shade800),
                 ],
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 16),
           Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'VEG',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
-                  color: Colors.black87,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.6),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 4),
               GestureDetector(
                 onTap: () => onVegToggle(!isVegOnly),
                 child: Container(
-                  width: 36,
-                  height: 20,
+                  width: 38,
+                  height: 22,
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: isVegOnly
                         ? Colors.green.shade700
                         : Colors.grey.shade400,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: AnimatedAlign(
                     duration: const Duration(milliseconds: 200),

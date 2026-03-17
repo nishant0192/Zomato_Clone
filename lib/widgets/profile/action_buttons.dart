@@ -9,7 +9,7 @@ class TwoActionButtons extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -28,14 +28,14 @@ class TwoActionButtons extends StatelessWidget {
                     color: Colors.black54,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Zomato Money',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 13),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
@@ -56,7 +56,7 @@ class TwoActionButtons extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -75,7 +75,7 @@ class TwoActionButtons extends StatelessWidget {
                     color: Colors.black54,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 const Expanded(
                   child: Text(
                     'Your coupons',
