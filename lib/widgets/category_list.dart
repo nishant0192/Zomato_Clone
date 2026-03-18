@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../models/app_data.dart';
+import '../screens/restaurant_details_screen.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({super.key});
@@ -10,7 +12,7 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1; // Default to 'All' which is now at index 1
   List<Map<String, dynamic>> _allCategories = [];
   List<Map<String, dynamic>> _displayCategories = [];
   bool _isLoading = true;
@@ -33,6 +35,15 @@ class _CategoryListState extends State<CategoryList> {
         setState(() {
           _allCategories = allCats;
           _displayCategories = allCats.take(10).toList();
+
+          if (_displayCategories.isNotEmpty) {
+            _displayCategories.insert(0, {
+              'name': 'Under ₹250',
+              'imageUrl':
+                  'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+            });
+          }
+
           _displayCategories.add({'name': 'See all', 'imageUrl': ''});
           _isLoading = false;
         });
@@ -201,16 +212,40 @@ class _CategoryListState extends State<CategoryList> {
                 onTap: () {
                   if (cat['name'] == 'See all') {
                     _showAllCategoriesBottomSheet();
-                  } else if (cat['name'] == 'Under ₹250') {
+                  } else if (cat['name'] == 'Under ₹250' ||
+                      cat['name'] == 'Under â‚¹250') {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Scaffold(
-                          appBar: AppBar(title: const Text('Under ₹250')),
-                          body: const Center(
-                            child: Text(
-                              'Products under ₹250 dummy product page',
-                            ),
+                        builder: (context) => RestaurantDetailsScreen(
+                          restaurant: const Restaurant(
+                            name: 'Under ₹250 Delights',
+                            imageUrl:
+                                'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                            rating: 4.5,
+                            time: '20-30 mins',
+                            offer: 'Every item under ₹250!',
+                            isPromoted: true,
+                            isVeg: false,
+                            dishes: [
+                              Dish(
+                                id: 'u1',
+                                name: 'Budget Burger',
+                                price: 149,
+                                description:
+                                    'A massive burger that fits your budget.',
+                                imageUrl:
+                                    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+                              ),
+                              Dish(
+                                id: 'u2',
+                                name: 'Pocket Pizza',
+                                price: 249,
+                                description: 'Delicious personal size pizza.',
+                                imageUrl:
+                                    'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+                              ),
+                            ],
                           ),
                         ),
                       ),
