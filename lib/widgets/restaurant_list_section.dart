@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import '../models/app_data.dart';
 import '../screens/restaurant_details_screen.dart';
 import '../utils/app_constants.dart';
 import '../utils/responsive.dart';
+import 'shimmer_widgets.dart';
 
 class RestaurantListSection extends StatelessWidget {
   final List<Restaurant> restaurants;
@@ -23,9 +26,17 @@ class RestaurantListSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Padding(
-        padding: EdgeInsets.all(32.0),
-        child: Center(child: CircularProgressIndicator()),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: List.generate(
+            3,
+            (index) => const Padding(
+              padding: EdgeInsets.only(bottom: 24),
+              child: RestaurantCardSkeleton(),
+            ),
+          ),
+        ),
       );
     }
 
@@ -220,27 +231,28 @@ class _RestaurantCardItemState extends State<_RestaurantCardItem> {
                         });
                       },
                       itemBuilder: (context, index) {
-                        return Image.network(
-                          _images[index],
+                        return CachedNetworkImage(
+                          imageUrl: _images[index],
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.network(
-                              'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.grey.shade200,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.restaurant,
-                                      size: 48,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(color: Colors.white),
+                          ),
+                          errorWidget: (context, url, error) => CachedNetworkImage(
+                            imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey.shade200,
+                              child: Center(
+                                child: Icon(
+                                  Icons.restaurant,
+                                  size: 48,
+                                  color: Colors.grey.shade400,
+                                ),
+                              ),
+                            ),
+                          ),
                         );
                       },
                     ),

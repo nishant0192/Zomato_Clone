@@ -27,7 +27,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     _scrollController = ScrollController()
       ..addListener(() {
         final isScrolled =
-            _scrollController.hasClients && _scrollController.offset > 180;
+            _scrollController.hasClients && _scrollController.offset > 224;
         if (isScrolled != _isScrolled) {
           setState(() {
             _isScrolled = isScrolled;
@@ -54,6 +54,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 d.description.toLowerCase().contains(query);
           }).toList();
 
+    bool _showExpandedSearch = _isScrolled || _isSearching;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -66,45 +68,42 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 pinned: true,
                 elevation: 0,
                 backgroundColor: Colors.white,
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 8, bottom: 8),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: (_isScrolled || _isSearching)
-                          ? Colors.transparent
-                          : Colors.black.withOpacity(0.5),
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 20,
-                        color: (_isScrolled || _isSearching)
-                            ? Colors.black
-                            : Colors.white,
+                leading: _showExpandedSearch
+                    ? IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+                        onPressed: () {
+                          if (_isSearching && !_isScrolled) {
+                            setState(() {
+                              _isSearching = false;
+                              _searchQuery = '';
+                              _searchController.clear();
+                            });
+                            _searchFocusNode.unfocus();
+                          } else {
+                            Navigator.pop(context);
+                          }
+                        },
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top: 8, bottom: 8),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.black),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
                       ),
-                      onPressed: () {
-                        if (_isSearching && !_isScrolled) {
-                          setState(() {
-                            _isSearching = false;
-                            _searchQuery = '';
-                            _searchController.clear();
-                          });
-                          _searchFocusNode.unfocus();
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                title: (_isScrolled || _isSearching)
+                title: _showExpandedSearch
                     ? Container(
-                        height: 40,
+                        margin: const EdgeInsets.symmetric(vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(8),
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: const Color.fromARGB(255, 255, 255, 255)),
                         ),
                         child: TextField(
                           controller: _searchController,
@@ -118,21 +117,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             hintText: 'Search in ${widget.restaurant.name}',
                             hintStyle: TextStyle(
                               color: Colors.grey.shade600,
-                              fontSize: 14,
+                              fontSize: 15,
                               fontWeight: FontWeight.normal,
                             ),
                             prefixIcon: const Icon(
                               Icons.search,
-                              color: Colors.red,
-                              size: 20,
+                              color: Color(0xFF1F803A), // Green search icon
+                              size: 22,
                             ),
                             suffixIcon: _searchQuery.isNotEmpty
                                 ? IconButton(
-                                    icon: const Icon(
-                                      Icons.close,
-                                      size: 16,
-                                      color: Colors.grey,
-                                    ),
+                                    icon: const Icon(Icons.close, size: 18, color: Colors.grey),
                                     onPressed: () {
                                       _searchController.clear();
                                       setState(() {
@@ -142,68 +137,62 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   )
                                 : null,
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 0,
-                              vertical: 10,
-                            ), // prefixIcon provides left padding
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                           ),
                         ),
                       )
                     : const SizedBox.shrink(),
                 actions: [
-                  if (!_isScrolled && !_isSearching) ...[
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
-                        onPressed: () {
-                          // Scroll down a bit or just show searching state
-                          setState(() {
-                            _isSearching = true;
-                          });
-                          _searchFocusNode.requestFocus();
-                        },
+                  if (!_showExpandedSearch) ...[
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isSearching = true;
+                        });
+                        _searchFocusNode.requestFocus();
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Row(
+                          children: const [
+                            Icon(Icons.search, color: Colors.black, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              'Search',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                    Container(
+                      margin: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade300),
                       ),
                       child: IconButton(
-                        icon: const Icon(
-                          Icons.group_add_outlined,
-                          color: Colors.white,
-                        ),
+                        icon: const Icon(Icons.more_vert, color: Colors.black, size: 20),
                         onPressed: () {},
                       ),
                     ),
-                  ],
-                  if (_isScrolled || _isSearching)
+                  ] else ...[
                     IconButton(
                       icon: const Icon(Icons.more_vert, color: Colors.black),
                       onPressed: () {},
                     ),
-                  if (!_isScrolled && !_isSearching)
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.more_vert, color: Colors.white),
-                        onPressed: () {},
-                      ),
-                    ),
+                  ],
                 ],
                 flexibleSpace: FlexibleSpaceBar(
                   stretchModes: const [StretchMode.zoomBackground],
@@ -328,12 +317,12 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 16,
+                    vertical: 10,
                     horizontal: 16,
                   ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1F803A),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -441,7 +430,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
   Widget _buildRestaurantInfo() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

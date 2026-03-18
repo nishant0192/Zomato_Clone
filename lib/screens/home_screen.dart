@@ -11,6 +11,7 @@ import '../widgets/restaurant_list_section.dart';
 import '../widgets/restaurant_carousel_section.dart';
 import '../widgets/explore_more_section.dart';
 import '../widgets/promo_banner.dart';
+import '../widgets/shimmer_widgets.dart';
 import 'search_screen.dart';
 import '../models/app_data.dart';
 import '../models/filter_options.dart';
@@ -45,9 +46,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> _loadRestaurants() async {
     try {
-      final String response = await rootBundle.loadString(
-        'assets/data/restaurants.json',
-      );
+      // Load data and show skeleton for at least 1500ms so users see the shimmer
+      final results = await Future.wait([
+        rootBundle.loadString('assets/data/restaurants.json'),
+        Future.delayed(const Duration(milliseconds: 1500)),
+      ]);
+      final String response = results[0] as String;
       final List<dynamic> data = json.decode(response);
       setState(() {
         _restaurants = data.map((json) => Restaurant.fromJson(json)).toList();
@@ -238,12 +242,12 @@ class _HomeScreenState extends State<HomeScreen>
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        vertical: 10,
+                        vertical: 5,
                         horizontal: 10,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(50),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.12),
@@ -323,13 +327,14 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                           ),
                           Container(
+                            margin: const EdgeInsets.only(right: 8),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
+                              horizontal: 16,
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0xFF1F803A),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(100),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -346,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 Text(
                                   '${cartManager.totalItems} item${cartManager.totalItems > 1 ? 's' : ''}',
                                   style: const TextStyle(
-                                    color: Colors.white70,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
                                   ),
@@ -472,10 +477,7 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         if (_isLoading)
           const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Center(child: CircularProgressIndicator()),
-            ),
+            child: HomeSkeletonLoading(),
           )
         else ...[
           SliverToBoxAdapter(

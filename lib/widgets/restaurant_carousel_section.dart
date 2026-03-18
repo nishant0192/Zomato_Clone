@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/app_data.dart';
 import '../screens/restaurant_details_screen.dart';
 import 'restaurant_card.dart';
+import 'shimmer_widgets.dart';
 
 class RestaurantCarouselSection extends StatelessWidget {
   final List<Restaurant> restaurants;
@@ -16,10 +17,7 @@ class RestaurantCarouselSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const SizedBox(
-        height: 200,
-        child: Center(child: CircularProgressIndicator()),
-      );
+      return const RestaurantCarouselSkeleton();
     }
 
     if (restaurants.isEmpty) {

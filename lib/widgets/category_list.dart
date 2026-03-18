@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/app_data.dart';
 import '../screens/restaurant_details_screen.dart';
+import 'shimmer_widgets.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({super.key});
@@ -25,9 +27,11 @@ class _CategoryListState extends State<CategoryList> {
 
   Future<void> _loadCategories() async {
     try {
-      final String catResponse = await rootBundle.loadString(
-        'assets/data/search_categories.json',
-      );
+      final results = await Future.wait([
+        rootBundle.loadString('assets/data/search_categories.json'),
+        Future.delayed(const Duration(milliseconds: 1500)),
+      ]);
+      final String catResponse = results[0] as String;
       final List<dynamic> catData = json.decode(catResponse);
       final allCats = List<Map<String, dynamic>>.from(catData);
 
@@ -111,7 +115,10 @@ class _CategoryListState extends State<CategoryList> {
                       ),
                       Expanded(
                         child: _allCategories.isEmpty
-                            ? const Center(child: CircularProgressIndicator())
+                            ? const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: CategoryListSkeleton(),
+                              )
                             : GridView.builder(
                                 padding: const EdgeInsets.only(
                                   left: 16,
@@ -139,16 +146,16 @@ class _CategoryListState extends State<CategoryList> {
                                             color: Colors.white,
                                           ),
                                           clipBehavior: Clip.antiAlias,
-                                          child: Image.network(
-                                            cat['imageUrl'],
+                                          child: CachedNetworkImage(
+                                            imageUrl: cat['imageUrl'],
                                             fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                                  return Image.network(
-                                                    'https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=200&q=80',
-                                                    fit: BoxFit.cover,
-                                                  );
-                                                },
+                                            placeholder: (context, url) => Container(
+                                              color: Colors.grey.shade200,
+                                            ),
+                                            errorWidget: (context, url, error) => CachedNetworkImage(
+                                              imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -185,10 +192,7 @@ class _CategoryListState extends State<CategoryList> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const SizedBox(
-        height: 100,
-        child: Center(child: CircularProgressIndicator()),
-      );
+      return const CategoryListSkeleton();
     }
 
     return SizedBox(
@@ -290,15 +294,16 @@ class _CategoryListState extends State<CategoryList> {
                             color: Colors.white,
                           ),
                           clipBehavior: Clip.antiAlias,
-                          child: Image.network(
-                            cat['imageUrl'],
+                          child: CachedNetworkImage(
+                            imageUrl: cat['imageUrl'],
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.network(
-                                'https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=200&q=80',
-                                fit: BoxFit.cover,
-                              );
-                            },
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey.shade200,
+                            ),
+                            errorWidget: (context, url, error) => CachedNetworkImage(
+                              imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       const SizedBox(height: 8),
