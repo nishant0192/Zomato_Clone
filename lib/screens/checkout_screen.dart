@@ -417,24 +417,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     child: Row(
                       children: [
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 12),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '₹$totalBill',
+                              '₹${totalBill.toStringAsFixed(2)}',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                fontSize: 12,
                               ),
                             ),
                             const Text(
                               'TOTAL',
                               style: TextStyle(
                                 color: Colors.white70,
-                                fontSize: 10,
+                                fontSize: 9,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -446,16 +446,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: 12,
                           ),
                         ),
-                        const SizedBox(width: 4),
                         const Icon(
                           Icons.arrow_right,
                           color: Colors.white,
-                          size: 20,
+                          size: 18,
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 4),
                       ],
                     ),
                   ),

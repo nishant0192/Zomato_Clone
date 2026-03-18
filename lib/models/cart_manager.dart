@@ -34,12 +34,22 @@ class CartManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get totalBill {
+  double get subTotal {
     double total = 0;
     items.forEach((dish, quantity) {
       total += dish.price * quantity;
     });
     return total;
+  }
+
+  double get gst => subTotal * 0.05; // 5% GST
+  double get deliveryCharge => 30.0;
+  double get platformFee => 5.0;
+  double get discountAmount => 45.0; // Hardcoded discount
+
+  double get totalBill {
+    if (items.isEmpty) return 0;
+    return subTotal + gst + deliveryCharge + platformFee - discountAmount;
   }
 
   int get totalItems {

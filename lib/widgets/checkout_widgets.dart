@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/address_model.dart';
 import '../models/user_profile.dart';
+import '../models/cart_manager.dart';
 
 class CheckoutGoldHeader extends StatelessWidget {
   const CheckoutGoldHeader({super.key});
@@ -234,45 +235,50 @@ class CheckoutDeliveryDetails extends StatelessWidget {
                     showArrow: true,
                   ),
                   const Divider(height: 32),
-                  _buildDetailRow(
-                    icon: Icons.receipt_long_outlined,
-                    title: 'Total Bill',
-                    subtitle: 'Incl. taxes and charges',
-                    showArrow: true,
-                    titleTrailing: Row(
-                      children: [
-                        Text(
-                          '₹${totalBill + 45}',
-                          style: const TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '₹$totalBill',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade50,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'You saved ₹45',
-                            style: TextStyle(
-                              color: Color(0xFF1C64D4),
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: () {
+                      _showBillBreakdown(context, totalBill);
+                    },
+                    child: _buildDetailRow(
+                      icon: Icons.receipt_long_outlined,
+                      title: 'Total Bill',
+                      subtitle: 'Incl. taxes and charges',
+                      showArrow: true,
+                      titleTrailing: Row(
+                        children: [
+                          Text(
+                            '₹${(totalBill + 45).toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.grey,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Text(
+                            '₹${totalBill.toStringAsFixed(2)}',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade50,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text(
+                              'You saved ₹45',
+                              style: TextStyle(
+                                color: Color(0xFF1C64D4),
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -281,6 +287,104 @@ class CheckoutDeliveryDetails extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  void _showBillBreakdown(BuildContext context, double totalBill) {
+    double deliveryCharge = cartManager.deliveryCharge;
+    double platformFee = cartManager.platformFee;
+    double subTotal = cartManager.subTotal;
+    double gst = cartManager.gst;
+    double discountAmount = cartManager.discountAmount;
+    double finalBill = cartManager.totalBill;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Bill Summary',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildBillRow('Item Total', subTotal),
+              const SizedBox(height: 12),
+              _buildBillRow('Delivery Charges', deliveryCharge),
+              const SizedBox(height: 12),
+              _buildBillRow('Platform Fee', platformFee),
+              const SizedBox(height: 12),
+              _buildBillRow('GST & Restaurant Charges', gst),
+              const SizedBox(height: 12),
+              _buildBillRow('Discount', -discountAmount, isDiscount: true),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Divider(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Grand Total',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '₹${finalBill.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildBillRow(String title, double amount, {bool isDiscount = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 14,
+            color: isDiscount ? Colors.green.shade700 : Colors.black87,
+            fontWeight: isDiscount ? FontWeight.w600 : FontWeight.normal,
+          ),
+        ),
+        Text(
+          isDiscount
+              ? '-₹${amount.abs().toStringAsFixed(2)}'
+              : '₹${amount.toStringAsFixed(2)}',
+          style: TextStyle(
+            fontSize: 14,
+            color: isDiscount ? Colors.green.shade700 : Colors.black87,
+            fontWeight: isDiscount ? FontWeight.w600 : FontWeight.normal,
+          ),
+        ),
+      ],
     );
   }
 
