@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -27,6 +28,9 @@ void main() {
     plugins: [ZegoUIKitSignalingPlugin()],
   );
 
+  // 3. Make system status bar edge-to-edge transparent
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   runApp(const MainApp());
 }
 
@@ -35,6 +39,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // Fully transparent
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent, // Match edge-to-edge
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'Flutter Assignment',

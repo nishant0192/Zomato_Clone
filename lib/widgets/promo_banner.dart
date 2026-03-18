@@ -45,7 +45,8 @@ class _PromoBannerState extends State<PromoBanner> {
         children: [
           CarouselSlider(
             options: CarouselOptions(
-              height: 340.0,
+              // Allow it to fill the height forced upon it by the sticky header
+              height: 240.0 + widget.topPadding!,
               autoPlay: true,
               enlargeCenterPage: false,
               aspectRatio: 16 / 9,

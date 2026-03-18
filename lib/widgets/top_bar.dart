@@ -22,6 +22,7 @@ class TopBar extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -113,6 +114,7 @@ class TopBar extends StatelessWidget {
               const SizedBox(width: 12),
               GestureDetector(
                 onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.push(
                     context,
                     MaterialPageRoute(

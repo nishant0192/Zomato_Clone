@@ -68,7 +68,7 @@ class RestaurantListSection extends StatelessWidget {
         children: [
           if (title.isNotEmpty) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              padding: const EdgeInsets.only(top: 0, bottom: 0),
               child: Text(
                 '${restaurants.length} RESTAURANTS DELIVERING TO YOU',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -80,7 +80,7 @@ class RestaurantListSection extends StatelessWidget {
             ),
             if (title == 'All Restaurants')
               Padding(
-                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
                   'Featured',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -88,13 +88,14 @@ class RestaurantListSection extends StatelessWidget {
                   ),
                 ),
               ),
-            AppSpacing.vMd,
+            // Removed SizedBox gap completely
           ],
           LayoutBuilder(
             builder: (context, constraints) {
               final columns = Responsive.getGridColumns(context);
               if (columns == 1) {
                 return ListView.separated(
+                  padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: restaurants.length,
@@ -106,6 +107,7 @@ class RestaurantListSection extends StatelessWidget {
                 );
               } else {
                 return GridView.builder(
+                  padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -172,6 +174,7 @@ class _RestaurantCardItemState extends State<_RestaurantCardItem> {
 
     return GestureDetector(
       onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
         Navigator.push(
           context,
           MaterialPageRoute(

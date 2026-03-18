@@ -42,6 +42,8 @@ class SearchArea extends StatelessWidget {
                   Expanded(
                     child: TextField(
                       onChanged: onSearchChanged,
+                      onTapOutside: (event) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       decoration: InputDecoration(
                         hintText: "Restaurant name or a dish...",
                         hintStyle: TextStyle(

@@ -43,7 +43,7 @@ class RestaurantCarouselSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 428, // 210 * 2 + 8 gap
+          height: 410, // Tuned to perfectly fit 2 rows without overflow
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -60,6 +60,7 @@ class RestaurantCarouselSection extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 8), // Minimal gap
                     child: GestureDetector(
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -83,12 +84,13 @@ class RestaurantCarouselSection extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Container(
                     width: 140, // Smaller card width
                     margin: const EdgeInsets.only(right: 8), // Minimal gap
                     child: GestureDetector(
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.push(
                           context,
                           MaterialPageRoute(

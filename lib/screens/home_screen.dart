@@ -9,6 +9,7 @@ import '../widgets/filter_bar.dart';
 import '../widgets/app_tab_bar.dart';
 import '../widgets/restaurant_list_section.dart';
 import '../widgets/restaurant_carousel_section.dart';
+import '../widgets/explore_more_section.dart';
 import '../widgets/promo_banner.dart';
 import '../models/app_data.dart';
 import '../models/filter_options.dart';
@@ -88,6 +89,8 @@ class _HomeScreenState extends State<HomeScreen>
         final hasCartItems = cartManager.items.isNotEmpty;
 
         return Scaffold(
+          extendBodyBehindAppBar: true,
+          extendBody: true,
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: Stack(
@@ -217,6 +220,7 @@ class _HomeScreenState extends State<HomeScreen>
                   right: 16,
                   child: GestureDetector(
                     onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
                       if (cartManager.currentRestaurant != null) {
                         Navigator.push(
                           context,
@@ -413,8 +417,16 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           SliverToBoxAdapter(
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 16.0),
+              child: const ExploreMoreSection(),
+            ),
+          ),
+          SliverToBoxAdapter(
             child: Padding(
-              padding: Responsive.getResponsivePadding(context),
+              padding: Responsive.getResponsivePadding(
+                context,
+              ).copyWith(top: 0),
               child: RestaurantListSection(
                 restaurants: filteredRestaurants,
                 isLoading: _isLoading,
@@ -424,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ],
         const SliverToBoxAdapter(
-          child: SizedBox(height: 100), // Extra space for floating bar
+          child: SizedBox(height: 150), // Extra space for floating bar
         ),
       ],
     );
@@ -592,7 +604,8 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
               statusBarBrightness: Brightness.light,
             ),
       child: Container(
-        color: Colors.white,
+        color: Colors
+            .transparent, // Changed from White so status bar matches banner underneath
         child: ClipRect(
           child: Stack(
             children: [

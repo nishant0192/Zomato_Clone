@@ -40,6 +40,8 @@ class AddressScreen extends StatelessWidget {
                   border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: TextField(
+                  onTapOutside: (event) =>
+                      FocusManager.instance.primaryFocus?.unfocus(),
                   decoration: InputDecoration(
                     hintText: 'Search for area, street name...',
                     hintStyle: TextStyle(
@@ -74,6 +76,7 @@ class AddressScreen extends StatelessWidget {
                       subtitle:
                           'Tap to fetch exact location automatically from map',
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -95,6 +98,7 @@ class AddressScreen extends StatelessWidget {
                       title: 'Add Address',
                       titleColor: Colors.green,
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -375,6 +379,7 @@ class AddressScreen extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.pop(context);
                         Navigator.push(
                           context,
