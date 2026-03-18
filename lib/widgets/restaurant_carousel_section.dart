@@ -35,7 +35,7 @@ class RestaurantCarouselSection extends StatelessWidget {
             'RECOMMENDED FOR YOU',
             style: TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.700,
+              fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
               color: Colors.grey,
             ),
