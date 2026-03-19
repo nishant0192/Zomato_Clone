@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/app_constants.dart' ;
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:lottie/lottie.dart';
 
 class PromoBanner extends StatefulWidget {
   final double? topPadding;
@@ -16,24 +16,24 @@ class _PromoBannerState extends State<PromoBanner> {
 
   final List<Map<String, dynamic>> _promos = [
     {
-      'title': 'MEALS UNDER ₹250',
-      'subtitle': 'FINAL PRICE, BEST OFFER APPLIED',
-      'colors': [Colors.blue.shade800, Colors.blue.shade400],
-      'icon': Icons.local_pizza,
+      'title': 'CRAVING A\nBURGER?',
+      'subtitle': 'BEST IN TOWN',
+      'colors': [Colors.orange.shade800, Colors.orange.shade500],
+      'lottiePath': 'assets/lottie/burger.json',
       'buttonText': 'Order now',
     },
     {
-      'title': 'FREE DELIVERY',
-      'subtitle': 'ON ORDERS ABOVE ₹149',
-      'colors': [Colors.orange.shade800, Colors.orange.shade400],
-      'icon': Icons.delivery_dining,
+      'title': 'SPICE UP\nYOUR DAY',
+      'subtitle': 'AUTHENTIC MEXICAN',
+      'colors': [Colors.red.shade800, Colors.red.shade400],
+      'lottiePath': 'assets/lottie/Mexican Burrito.json',
       'buttonText': 'Explore',
     },
     {
-      'title': 'UP TO 60% OFF',
-      'subtitle': 'USE CODE: SUPER60',
+      'title': 'FREE\nDELIVERY',
+      'subtitle': 'ON ORDERS ABOVE ₹149',
       'colors': [Colors.purple.shade800, Colors.purple.shade400],
-      'icon': Icons.celebration,
+      'lottiePath': 'assets/lottie/delivery.json',
       'buttonText': 'Claim now',
     },
   ];
@@ -47,7 +47,7 @@ class _PromoBannerState extends State<PromoBanner> {
           CarouselSlider(
             options: CarouselOptions(
               // Allow it to fill the height forced upon it by the sticky header
-              height: 240.0 + widget.topPadding!,
+              height: 260.0 + widget.topPadding!,
               autoPlay: true,
               enlargeCenterPage: false,
               aspectRatio: 16 / 9,
@@ -79,23 +79,23 @@ class _PromoBannerState extends State<PromoBanner> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 20.0,
-                            right: 20.0,
+                            left: 24.0,
+                            right: 140.0,
                             bottom: 40.0,
-                            top: 20.0 + widget.topPadding!,
+                            top: 40.0 + widget.topPadding!,
                           ),
                           child: Align(
-                            alignment: Alignment.bottomCenter,
+                            alignment: Alignment.bottomLeft,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
                                   promo['title'] as String,
-                                  textAlign: TextAlign.center,
+                                  textAlign: TextAlign.left,
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 36,
+                                    fontSize: 32,
                                     fontWeight: FontWeight.w900,
                                     height: 1.1,
                                     fontStyle: FontStyle.italic,
@@ -158,16 +158,25 @@ class _PromoBannerState extends State<PromoBanner> {
                           ),
                         ),
                         Positioned(
-                          right: -20,
+                          right: -10,
                           bottom: -20,
-                          child: Transform.rotate(
-                            angle: -0.2,
-                            child: Icon(
-                              promo['icon'] as IconData,
-                              size: 160,
-                              color: Colors.white.withOpacity(0.15),
-                            ),
-                          ),
+                          child: promo.containsKey('lottiePath')
+                              ? SizedBox(
+                                  width: 220,
+                                  height: 220,
+                                  child: Lottie.asset(
+                                    promo['lottiePath'] as String,
+                                    fit: BoxFit.contain,
+                                  ),
+                                )
+                              : Transform.rotate(
+                                  angle: -0.2,
+                                  child: Icon(
+                                    promo['icon'] as IconData,
+                                    size: 160,
+                                    color: Colors.white.withOpacity(0.15),
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -243,7 +252,12 @@ class _PromoBannerState extends State<PromoBanner> {
                   child: Stack(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.only(
+                          left: 20.0,
+                          top: 20.0,
+                          bottom: 20.0,
+                          right: 140.0,
+                        ),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Column(
@@ -320,16 +334,25 @@ class _PromoBannerState extends State<PromoBanner> {
                         ),
                       ),
                       Positioned(
-                        right: -20,
-                        bottom: -20,
-                        child: Transform.rotate(
-                          angle: -0.2,
-                          child: Icon(
-                            promo['icon'] as IconData,
-                            size: 160,
-                            color: Colors.white.withOpacity(0.15),
-                          ),
-                        ),
+                        right: -10,
+                        bottom: -10,
+                        child: promo.containsKey('lottiePath')
+                            ? SizedBox(
+                                width: 180,
+                                height: 180,
+                                child: Lottie.asset(
+                                  promo['lottiePath'] as String,
+                                  fit: BoxFit.contain,
+                                ),
+                              )
+                            : Transform.rotate(
+                                angle: -0.2,
+                                child: Icon(
+                                  promo['icon'] as IconData,
+                                  size: 160,
+                                  color: Colors.white.withOpacity(0.15),
+                                ),
+                              ),
                       ),
                       Positioned(
                         right: 40,

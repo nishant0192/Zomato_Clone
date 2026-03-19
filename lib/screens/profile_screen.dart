@@ -113,7 +113,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       // Save Button
                       Padding(
-                        padding: const EdgeInsets.all(20),
+                        padding: EdgeInsets.only(
+                          left: 20, 
+                          right: 20, 
+                          top: 20, 
+                          bottom: 20 + MediaQuery.of(context).padding.bottom,
+                        ),
                         child: PrimaryButton(
                           label: 'Save preference',
                           onPressed: selectedMode != currentMode

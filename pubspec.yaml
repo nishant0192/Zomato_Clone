@@ -30,9 +30,17 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.22.3
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.jpg"
+  adaptive_icon_background: "#FE0034"
+  adaptive_icon_foreground: "assets/images/logo.jpg"
 
 flutter:
   uses-material-design: true

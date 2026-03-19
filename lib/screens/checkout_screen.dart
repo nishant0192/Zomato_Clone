@@ -430,146 +430,161 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             
             // Main Payment Bar
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12 + 16), // Extra bottom padding for safe area
+              padding: EdgeInsets.only(
+                left: 16, 
+                top: 12, 
+                right: 16, 
+                bottom: MediaQuery.of(context).padding.bottom + 10,
+              ),
               child: Row(
                 children: [
                   // Payment Method Info
                   Expanded(
+                    flex: 5,
                     child: InkWell(
                       onTap: _openPaymentSelection,
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: const Icon(
-                              Icons.payments_outlined,
-                              size: 16,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'PAY USING',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey.shade400,
-                                      letterSpacing: 0.5,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const Icon(
-                                    Icons.arrow_drop_up,
-                                    size: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ],
+                              Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: isDark ? Colors.white12 : Colors.white,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(color: isDark ? Colors.transparent : Colors.grey.shade300),
+                                ),
+                                child: const Icon(
+                                  Icons.payments_outlined,
+                                  size: 14,
+                                  color: Colors.grey,
+                                ),
                               ),
+                              const SizedBox(width: 8),
                               Text(
-                                _selectedPaymentMethod,
+                                'PAY USING',
                                 style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey.shade400,
+                                  letterSpacing: 0.5,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: isDark ? Colors.white : Colors.black,
                                 ),
                               ),
-                              if (_selectedPaymentMethod == 'Pay on delivery')
-                                Text(
-                                  'UPI/Cash',
-                                  style: TextStyle(color: isDark ? Colors.white38 : Colors.grey, fontSize: 11),
-                                ),
+                              const Icon(
+                                Icons.arrow_drop_up,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
                             ],
                           ),
+                          const SizedBox(height: 6),
+                          Text(
+                            _selectedPaymentMethod,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
+                          ),
+                          if (_selectedPaymentMethod == 'Pay on delivery') ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              'UPI/Cash',
+                              style: TextStyle(color: isDark ? Colors.white38 : Colors.grey, fontSize: 11),
+                            ),
+                          ],
                         ],
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
                   
                   // Place Order Button
-                  InkWell(
-                    onTap: () {
-                      final order = Order(
-                        id: DateTime.now().millisecondsSinceEpoch.toString(),
-                        restaurantName: widget.restaurant.name,
-                        restaurantSlug: widget.restaurant.slug,
-                        restaurantAddress: currentAddressNotifier.value.subtitle,
-                        restaurantImageUrl: widget.restaurant.imageUrl,
-                        items: cartManager.items.entries.map((entry) {
-                          return OrderItem(
-                            name: entry.key.name,
-                            quantity: entry.value,
-                            isVeg: entry.key.isVeg,
-                            price: entry.key.price,
-                          );
-                        }).toList(),
-                        orderDate: DateTime.now(),
-                        totalPrice: totalBill,
-                      );
-                      orderManager.addOrder(order);
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SuccessScreen()),
-                      );
-                      cartManager.clear();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: accentGreen,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '₹${totalBill.toStringAsFixed(0)}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                  Expanded(
+                    flex: 6,
+                    child: InkWell(
+                      onTap: () {
+                        final order = Order(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          restaurantName: widget.restaurant.name,
+                          restaurantSlug: widget.restaurant.slug,
+                          restaurantAddress: currentAddressNotifier.value.subtitle,
+                          restaurantImageUrl: widget.restaurant.imageUrl,
+                          items: cartManager.items.entries.map((entry) {
+                            return OrderItem(
+                              name: entry.key.name,
+                              quantity: entry.value,
+                              isVeg: entry.key.isVeg,
+                              price: entry.key.price,
+                            );
+                          }).toList(),
+                          orderDate: DateTime.now(),
+                          totalPrice: totalBill,
+                        );
+                        orderManager.addOrder(order);
+  
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SuccessScreen()),
+                        );
+                        cartManager.clear();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: accentGreen,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '₹${totalBill.toStringAsFixed(0)}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
                                 ),
-                              ),
-                              const Text(
-                                'TOTAL',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
+                                const Text(
+                                  'TOTAL',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 40),
-                          const Text(
-                            'Place Order',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              ],
                             ),
-                          ),
-                          const SizedBox(width: 4),
-                          const Icon(
-                            Icons.arrow_right,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ],
+                            Row(
+                              children: const [
+                                Text(
+                                  'Place Order',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(width: 2),
+                                Icon(
+                                  Icons.arrow_right,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -591,9 +606,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       builder: (context) {
         return Container(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-            left: 12,
-            right: 12,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Stack(
             alignment: Alignment.topCenter,
@@ -603,10 +616,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 margin: const EdgeInsets.only(top: 80),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -804,9 +817,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       builder: (context) {
         return Container(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-            left: 12,
-            right: 12,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Stack(
             alignment: Alignment.topCenter,
@@ -816,10 +827,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 margin: const EdgeInsets.only(top: 80),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,

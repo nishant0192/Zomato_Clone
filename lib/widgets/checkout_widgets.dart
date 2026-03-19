@@ -383,9 +383,7 @@ class CheckoutDeliveryDetails extends StatelessWidget {
       builder: (BuildContext context) {
         return Container(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-            left: 12,
-            right: 12,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Stack(
             alignment: Alignment.topCenter,
@@ -395,10 +393,10 @@ class CheckoutDeliveryDetails extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 80), // Increased for consistency
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
-                  borderRadius: BorderRadius.circular(28), // Rounded at bottom too
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)), // Rounded at top only
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

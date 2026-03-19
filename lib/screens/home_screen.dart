@@ -129,15 +129,7 @@ class _HomeScreenState extends State<HomeScreen>
                 },
                 child: SafeArea(
                   top: false,
-                  child: TabBarView(
-                    controller: _tabController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      _buildHomeTab(),
-                      _buildDealsTab(),
-                      _buildDiningTab(),
-                    ],
-                  ),
+                  child: _buildHomeTab(),
                 ),
               ),
 
@@ -576,49 +568,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildDealsTab() {
-    final dealsRestaurants = _restaurants
-        .where((r) => r.offer.isNotEmpty)
-        .toList();
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: Responsive.getResponsivePadding(context),
-            child: RestaurantListSection(
-              restaurants: dealsRestaurants,
-              isLoading: _isLoading,
-              title: 'Deals of the Day',
-            ),
-          ),
-          const SizedBox(height: 100),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDiningTab() {
-    final diningRestaurants = _restaurants
-        .where((r) => r.rating >= 4.0)
-        .toList();
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: Responsive.getResponsivePadding(context),
-            child: RestaurantListSection(
-              restaurants: diningRestaurants,
-              isLoading: _isLoading,
-              title: 'Top Rated Restaurants',
-            ),
-          ),
-          const SizedBox(height: 100),
-        ],
-      ),
-    );
-  }
 
   List<Restaurant> _getFilteredAndSortedRestaurants() {
     List<Restaurant> filteredRestaurants = _restaurants;
@@ -695,7 +645,7 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   late final double topBarHeight;
   final double searchHeight = 85.0;
-  final double promoHeight = 280.0; // Taller for full screen behind
+  final double promoHeight = 300.0; // Taller for full screen behind
   final double bottomHeight = 116.0;
 
   _StickyHeaderDelegate({
