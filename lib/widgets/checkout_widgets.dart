@@ -475,7 +475,7 @@ class CheckoutDeliveryDetails extends StatelessWidget {
                           decoration: const BoxDecoration(
                             color: Color(0xFF1C64D4),
                           ),
-                          padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+                          padding: const EdgeInsets.fromLTRB(24, 18, 24, 42),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
